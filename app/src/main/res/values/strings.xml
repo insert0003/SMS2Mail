@@ -25,5 +25,10 @@
 
     <string name="configuration_label_account">Account</string>
     <string name="configuration_label_forward_to">Forward to</string>
+    <string name="configuration_label_sendgrid_address">SendGrid Address</string>
+    <string name="configuration_label_sendgrid_apikey">SendGrid APIKey</string>
+
     <string name="configuration_text_email_to_forward">E-mail to forward</string>
+    <string name="configuration_text_sendgrid_address">SendGrid Address</string>
+    <string name="configuration_text_sendgrid_apikey">SendGrid APIKey</string>
 </resources>

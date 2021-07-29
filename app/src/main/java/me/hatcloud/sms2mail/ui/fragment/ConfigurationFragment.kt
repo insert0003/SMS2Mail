@@ -27,7 +27,9 @@ class ConfigurationFragment : Fragment() {
                 binding.radioBtnSecurityNone,
                 binding.radioBtnSecuritySSL,
                 binding.radioBtnSecurityTLS,
-                binding.inputEmailToForward)
+                binding.inputEmailToForward,
+                binding.inputSendgridAddress,
+                binding.inputSendgridApiKey)
     }
 
     private var isEditMode = false
@@ -49,7 +51,9 @@ class ConfigurationFragment : Fragment() {
                             R.id.radioBtnSecurityTLS -> SecurityType.TLS
                             else -> SecurityType.NONE
                         },
-                        binding.inputEmailToForward.text.toString())
+                        binding.inputEmailToForward.text.toString(),
+                        binding.inputSendgridAddress.text.toString(),
+                        binding.inputSendgridApiKey.text.toString())
                         .apply {
                             password = binding.inputPassword.text.toString()
                         }
@@ -77,6 +81,8 @@ class ConfigurationFragment : Fragment() {
                 SecurityType.TLS -> binding.radioSecurity.check(R.id.radioBtnSecurityTLS)
             }
             binding.inputEmailToForward.setText(configuration.emailToForward)
+            binding.inputSendgridAddress.setText(configuration.sendgridAddress)
+            binding.inputSendgridApiKey.setText(configuration.sendgridApiKey)
         }
 
         binding.btnEditAndApply.setText(R.string.edit)

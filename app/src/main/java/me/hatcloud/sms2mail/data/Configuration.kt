@@ -9,6 +9,8 @@ data class Configuration(var email: String?,
                          var smtpPort: String?,
                          var securityType: SecurityType,
                          var emailToForward: String?,
+                         var sendgridAddress: String?,
+                         var sendgridApiKey: String?,
                          var encryptedPassword: String? = "") {
     var password
         get() = Coder.decodeAES(encryptedPassword.toString(), ConfigurationUtil.passwordAesKey) ?: ""

@@ -14,10 +14,13 @@ object ConfigurationUtil {
 
     private const val KEY_ACCOUNT_EMAIL = "account_email"
     private const val KEY_ACCOUNT_PASSWORD = "account_password"
-    private const val KEY_SMTP_SERVER_HOST = "smtp_server_host "
+    private const val KEY_SMTP_SERVER_HOST = "smtp_server_host"
     private const val KEY_SMTP_SERVER_PORT = "smtp_server_port"
     private const val KEY_SMTP_SECURITY = "smtp_security"
-    private const val KEY_EMAIL_TO_FORWARD = "email_to_forward "
+    private const val KEY_EMAIL_TO_FORWARD = "email_to_forward"
+    private const val KEY_SENDGRID_ADDRESS = "sendgrid_address"
+    private const val KEY_SENDGRID_APIKEY = "sendgrid_apikey"
+
 
     private val sharePreference by lazy {
         Sms2MailApp.getInstance().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -69,6 +72,8 @@ object ConfigurationUtil {
         edit.putString(KEY_SMTP_SERVER_PORT, configuration.smtpPort)
         edit.putInt(KEY_SMTP_SECURITY, configuration.securityType.value)
         edit.putString(KEY_EMAIL_TO_FORWARD, configuration.emailToForward)
+        edit.putString(KEY_SENDGRID_ADDRESS, configuration.sendgridAddress)
+        edit.putString(KEY_SENDGRID_APIKEY, configuration.sendgridApiKey)
         edit.apply()
     }
 
@@ -79,6 +84,8 @@ object ConfigurationUtil {
                 sharePreference.getString(KEY_SMTP_SERVER_PORT, ""),
                 sharePreference.getInt(KEY_SMTP_SECURITY, 0).toSecurityType(),
                 sharePreference.getString(KEY_EMAIL_TO_FORWARD, ""),
+                sharePreference.getString(KEY_SENDGRID_ADDRESS, ""),
+                sharePreference.getString(KEY_SENDGRID_APIKEY, ""),
                 sharePreference.getString(KEY_ACCOUNT_PASSWORD, "")
         )
     }

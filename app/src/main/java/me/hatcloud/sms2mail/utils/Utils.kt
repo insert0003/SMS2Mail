@@ -16,13 +16,10 @@ import me.hatcloud.sms2mail.data.MailInfo
 import me.hatcloud.sms2mail.data.Sms
 import android.net.Uri
 import java.util.*
-import javax.mail.Message
-import javax.mail.MessagingException
-import javax.mail.Session
-import javax.mail.Transport
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
 
+import com.github.kittinunf.fuel.core.FuelManager
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 
 private const val REQUEST_CODE_ASK_PERMISSIONS = 124
 
@@ -101,39 +98,66 @@ fun sendMail(mailInfo: MailInfo): Boolean {
     LogUtil.d("send mail: $mailInfo")
     val properties = mailInfo.getProperties() ?: return false
 
-    // 根据邮件会话属性和密码验证器构造一个发送邮件的session
-    val sendMailSession = if (mailInfo.needValid) {
-        Session.getDefaultInstance(properties, MailPasswordAuthenticator(mailInfo.userName, mailInfo.password))
-    } else {
-        Session.getDefaultInstance(properties)
+    val apiKey = mailInfo.sendgridApiKey
+    println("apiKey: $apiKey")
+
+    // 创建邮件发送者地址
+    val from = mailInfo.sendgridAddress
+    println("apifrom: $from")
+
+    // 创建邮件的接收者地址，并设置到邮件消息中
+    val to = mailInfo.toAddress
+    // 邮件主题
+    val subject = mailInfo.subject
+    val fromName = mailInfo.userName
+    val mailContent = mailInfo.content
+
+    // 设置邮件消息的发送者
+    val content = """
+        {
+            "personalizations": [
+                {
+                    "to": [
+                        {
+                            "email": "$to"
+                        }
+                    ]
+                }
+            ],
+            "from": {
+                "email": "$from",
+                "name": "$fromName"
+            },
+            "subject": "$subject",
+            "content": [
+                {
+                    "type": "text/plain",
+                    "value": "$mailContent"
+                },
+                {
+                    "type": "text/html",
+                    "value": "<html><body>$mailContent</body></html>"
+                }
+            ]
+        }
+        """
+
+    FuelManager.instance.baseHeaders = mapOf("Content-Type" to "application/json", "Authorization" to "Bearer $apiKey")
+    "https://api.sendgrid.com/v3/mail/send".httpPost().body((content)).response { req, res, result ->
+        when (result) {
+            is Result.Failure -> {
+                println("API call failed")
+            }
+            is Result.Success -> {
+                println("API call succeed")
+                val data = result.get()
+                println(data)
+            }
+        }
+        println(req)
+        println(res)
+        println(result)
     }
 
-    try {
-        // 根据session创建一个邮件消息
-        val mailMessage = MimeMessage(sendMailSession)
-        mailMessage.addHeader("Content-type", "text/HTML; charset=UTF-8")
-        mailMessage.addHeader("format", "flowed")
-        mailMessage.addHeader("Content-Transfer-Encoding", "8bit")
-        // 创建邮件发送者地址
-        val from = InternetAddress(mailInfo.fromAddress)
-        // 设置邮件消息的发送者
-        mailMessage.setFrom(from)
-        // 创建邮件的接收者地址，并设置到邮件消息中
-        val to = InternetAddress(mailInfo.toAddress)
-        mailMessage.setRecipient(Message.RecipientType.TO, to)
-        // 设置邮件消息的主题
-        mailMessage.setSubject(mailInfo.subject, "UTF-8")
-        // 设置邮件消息发送的时间
-        mailMessage.sentDate = Date()
-
-        // 设置邮件消息的主要内容
-        mailMessage.setText(mailInfo.content, "UTF-8")
-        // 发送邮件
-        Transport.send(mailMessage)
-        return true
-    } catch (ex: MessagingException) {
-        ex.printStackTrace()
-    }
-
-    return false
+    return true
 }

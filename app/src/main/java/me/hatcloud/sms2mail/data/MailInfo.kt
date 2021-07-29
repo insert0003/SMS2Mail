@@ -8,6 +8,8 @@ data class MailInfo(private val mailServerHost: String,                     // �
                     val fromAddress: String,                        // 邮件发送者的地址
                     val toAddress: String,                          // 邮件接收者的地址
                     val userName: String,                           // 登陆邮件发送服务器的用户名
+                    val sendgridAddress: String,                    // SendGrid Address
+                    val sendgridApiKey: String,                     // SendGrid API Key
                     val password: String,                           // 登陆邮件发送服务器的密码
                     val subject: String,                            // 邮件主题
                     val content: String,                            // 邮件的文本内容
@@ -20,6 +22,8 @@ data class MailInfo(private val mailServerHost: String,                     // �
             configuration.email.toString(),
             configuration.emailToForward.toString(),
             configuration.email.toString(),
+            configuration.sendgridAddress.toString(),
+            configuration.sendgridApiKey.toString(),
             configuration.password,
             subject,
             content)

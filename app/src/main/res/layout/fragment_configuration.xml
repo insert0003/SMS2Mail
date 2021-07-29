@@ -121,6 +121,39 @@
             android:inputType="textWebEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
+<!-- SendGrid Address -->
+    <TextView
+        style="@style/configuration_label_text"
+        android:text="@string/configuration_label_sendgrid_address" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputSendgridAddress"
+            style="@style/configuration_input_text"
+            android:hint="@string/configuration_text_sendgrid_address"
+            android:inputType="textWebEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    SendGrid APIKey-->
+    <TextView
+        style="@style/configuration_label_text"
+        android:text="@string/configuration_label_sendgrid_apikey" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputSendgridApiKey"
+            style="@style/configuration_input_text"
+            android:hint="@string/configuration_text_sendgrid_apikey"
+            android:inputType="textVisiblePassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    Edit Button-->
     <Button
         android:id="@+id/btnEditAndApply"
         android:layout_width="wrap_content"
